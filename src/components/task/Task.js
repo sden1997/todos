@@ -8,13 +8,13 @@ import './task.css'
 class Task extends Component {
 
     state = {
-        editing: false,
+        mode: 'read',
         value: '',
     }
 
     handleEdit = () => { // Метод для начала редактирования
         this.setState({
-            editing: true,
+            mode: 'edit',
             value: this.props.item.value
         })
     }
@@ -23,9 +23,9 @@ class Task extends Component {
         event.preventDefault();
         const {onUpdateItem, item} = this.props;
         if (this.state.value.trim()) { // Проверка на пустое значение
-            onUpdateItem(item.id, 'value' ,this.state.value); // Вызов функции для обновления задачи
+            onUpdateItem(item.id, 'value' , this.state.value); // Вызов функции для обновления задачи
             this.setState({ // Сброс состояния
-                editing: false,
+                mode: 'read',
                 value: ''
             })
         }
@@ -46,7 +46,7 @@ class Task extends Component {
         if (checked) {
             className = 'completed'
         }
-        if (this.state.editing) {
+        if (this.state.mode === 'edit') {
             className = 'editing'
         }
 
@@ -66,7 +66,7 @@ class Task extends Component {
                     <button className="icon icon-edit" onClick={this.handleEdit}/>
                     <button className="icon icon-destroy" onClick={() => onDelete(id)}/>
                 </div>
-                {this.state.editing && (
+                { this.state.mode === 'edit' ? (
                     <form onSubmit={this.handleSubmit}>
                         <input
                             type="text"
@@ -74,11 +74,11 @@ class Task extends Component {
                             value={this.state.value}
                             onChange={this.handleChange}
                             autoFocus
-                            onBlur={() => this.setState({ editing: false })} // Закрытие редактирования при потере фокуса
+                            onBlur={() => this.setState({ mode: 'read' })} // Закрытие редактирования при потере фокуса
                             />
 
                     </form>
-                )}
+                ) : null}
             </li>
         )
     }

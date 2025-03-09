@@ -10,20 +10,17 @@ class TaskList extends Component {
     render() {
 
         const {todos, onUpdateItem, onDelete} = this.props;
-        const elements = todos.map((item) => {
-            return (
-                <Task 
-                key={item.id}
-                item={item}
-                onUpdateItem={onUpdateItem}
-                onDelete={onDelete}
-                />
-            )
-        })
 
         return (
             <ul className="todo-list">
-                {elements}
+                {todos.map((item) => (
+                    <Task 
+                        key={item.id}
+                        item={item}
+                        onUpdateItem={onUpdateItem}
+                        onDelete={onDelete}
+                    />
+                ))}
             </ul>
         )
     }

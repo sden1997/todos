@@ -4,6 +4,8 @@ import NewTaskForm from '../newTaskForm/NewTaskForm';
 import TaskList from '../taskList/TaskList';
 import Footer from '../footer/Footer';
 
+import { getFilteredItems } from '../../helpers/getFilteredItems';
+
 class App extends Component {
 
     state = {
@@ -34,21 +36,6 @@ class App extends Component {
         }))
     }
 
-    filteredItems = () => {
-        const {todos, filter} = this.state;
-        return (
-            todos.filter(({checked}) => {
-                if (filter === 'All') {
-                    return true
-                } else if (filter === 'Completed') {
-                    return checked === true
-                } else {
-                    return checked === false
-                }
-            })
-        )
-    }
-
     onUpdateItem = (id, field, newValue) => {
         this.setState(({todos}) => ({
             todos: todos.map((item) => {
@@ -77,13 +64,14 @@ class App extends Component {
     render() {
         const {todos, filter} = this.state
         const numberLefts = todos.filter(item => !item.checked).length
+        const filteredTodos = getFilteredItems(todos, filter)
 
         return(
             <div className='todoapp'>
                 <NewTaskForm onAdd={this.onAdd}/>
                 <div className='main'>
                     <TaskList 
-                    todos={this.filteredItems()}
+                    todos={filteredTodos}
                     onUpdateItem={this.onUpdateItem}
                     onDelete={this.deleteItem}/>
                     <Footer 
